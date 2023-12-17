@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.version     = "0.0.1"
   s.author      = "Steve Shreeve"
   s.email       = "steve.shreeve@gmail.com"
-  s.summary     = 
+  s.summary     = "A Ruby gem that expands braces in strings"
   s.description = "Expand braces, similar to a file glob"
   s.homepage    = "https://github.com/shreeve/unbrace"
   s.license     = "MIT"
