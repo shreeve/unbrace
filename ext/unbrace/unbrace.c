@@ -1,8 +1,8 @@
 // ============================================================================
 // Summary: unbrace.c - Offers String#unbrace, which expands braces in strings.
-// Version: 0.5.0
+// Version: 0.5.1
 //  Author: Steve Shreeve (steve.shreeve@gmail.com)
-//    Date: December 16, 2023
+//    Date: December 17, 2023
 //   Legal: Same license as Ruby (see http://www.ruby-lang.org/en/LICENSE.txt)
 //    Note: This file is derived from "dir.c" in the Ruby source code.
 // ============================================================================
