@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.files       = `git ls-files`.split("\n") - %w[.gitignore]
   s.extensions << 'ext/unbrace/extconf.rb'
   s.add_development_dependency "bundler", "~> 2.0"
-  s.add_development_dependency "rake"
-  s.add_development_dependency "rake-compiler"
+  s.add_development_dependency "rake", "~> 13.1"
+  s.add_development_dependency "rake-compiler", "~> 1.2"
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
 end
