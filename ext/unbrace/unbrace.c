@@ -20,14 +20,10 @@ brace_expand(const char *str, VALUE ary) // FIXME: Add ",rb_encoding *enc)" here
     int nest = 0;
 
     while (*p) {
-        if (*p == '{' && nest++ == 0) {
-            lbrace = p;
-        }
+        if (*p == '\\' && !*++p) break;
+        if (*p == '{' && nest++ == 0) lbrace = p;
         if (*p == '}' && lbrace && --nest == 0) {
             rbrace = p;
-            break;
-        }
-        if (*p == '\\' && !*++p) {
             break;
         }
         p++; // FIXME: For encoding, use Inc(p, pend, enc) here?
@@ -45,9 +41,9 @@ brace_expand(const char *str, VALUE ary) // FIXME: Add ",rb_encoding *enc)" here
             const char *t = ++p;
             nest = 0;
             while (p < rbrace && !(*p == ',' && nest == 0)) {
+                if (*p == '\\' && (++p == rbrace)) break;
                 if (*p == '{') nest++;
                 if (*p == '}') nest--;
-                if (*p == '\\' && (++p == rbrace)) break;
                 p++; // FIXME: For encoding, use Inc(p, pend, enc) here?
             }
             memcpy(buf + size, t, p - t);
