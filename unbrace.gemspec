@@ -2,6 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name        = "unbrace"
+  s.version     = `grep -m 1 '^// Version:' ext/unbrace/unbrace.c | cut -f 3 -d ' '`
   s.version     = "0.0.1"
   s.author      = "Steve Shreeve"
   s.email       = "steve.shreeve@gmail.com"
