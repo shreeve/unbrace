@@ -1,6 +1,7 @@
-.DS_Store
-*.gem
 *.bundle
+*.gem
 *.so
+.DS_Store
+.vscode/
 Gemfile.lock
 tmp/
