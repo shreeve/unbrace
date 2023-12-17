@@ -2,7 +2,7 @@
 // FIXME: Encoding requires(?) others, such as #include "ruby/encoding.h"
 
 static int
-brace_expand(const char *str) // FIXME: Add ",rb_encoding *enc)" here?
+brace_expand(const char *str, VALUE ary) // FIXME: Add ",rb_encoding *enc)" here?
 {
     const char *p = str;
     const char *pend = p + strlen(p);
@@ -44,12 +44,12 @@ brace_expand(const char *str) // FIXME: Add ",rb_encoding *enc)" here?
             }
             memcpy(buf + shift, t, p - t);
             strlcpy(buf + shift + (p - t), rbrace + 1, len - (shift + (p - t)));
-            status = brace_expand(buf);
+            status = brace_expand(buf, ary);
         }
         free(buf); // FIXME: Use GLOB_FREE(buf) here?
     }
     else if (!lbrace && !rbrace) {
-        printf("%s\n", str);
+        rb_ary_push(ary, rb_str_new_cstr(str));
         status = 1;
     }
 
@@ -57,14 +57,21 @@ brace_expand(const char *str) // FIXME: Add ",rb_encoding *enc)" here?
 }
 
 static VALUE
-rb_str_unbrace(VALUE self, VALUE item)
+rb_str_unbrace(VALUE str)
 {
-    brace_expand("lawyer_{name,{work,home}_email_{active,inactive},state}");
-    // FIXME: How do we return the ary VALUE?
+    if (!rb_block_given_p()) {
+        const char *str = "lawyer_{name,{work,home}_email_{active,inactive},state}";
+        VALUE ary = rb_ary_new();
+        brace_expand(str, ary);
+        return ary;
+    }
+    else {
+        return Qnil;
+    }
 }
 
 void
-Init_unbrace(VALUE self)
+Init_unbrace(void)
 {
     VALUE rb_cString = rb_define_class("String", rb_cObject);
     rb_define_method(rb_cString, "unbrace", rb_str_unbrace, 0);
