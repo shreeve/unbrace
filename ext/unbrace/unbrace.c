@@ -10,14 +10,14 @@
 #include "ruby/ruby.h"
 // FIXME: Encoding requires(?) others, such as #include "ruby/encoding.h"
 
-static int
+static void
 brace_expand(const char *str, VALUE ary) // FIXME: Add ",rb_encoding *enc)" here?
 {
     const char *p = str;
     const char *pend = p + strlen(p);
     const char *s = p;
     const char *lbrace = 0, *rbrace = 0;
-    int nest = 0, status = 0;
+    int nest = 0;
 
     while (*p) {
         if (*p == '{' && nest++ == 0) {
@@ -37,8 +37,8 @@ brace_expand(const char *str, VALUE ary) // FIXME: Add ",rb_encoding *enc)" here
         size_t len = strlen(s) + 1;
         char *buf = (char *) malloc(len); // FIXME: Use ALLOC_N(...) here?
         long shift;
+        if (!buf) return;
 
-        if (!buf) return -1;
         memcpy(buf, s, lbrace - s);
         shift = (lbrace - s);
         p = lbrace;
@@ -53,16 +53,13 @@ brace_expand(const char *str, VALUE ary) // FIXME: Add ",rb_encoding *enc)" here
             }
             memcpy(buf + shift, t, p - t);
             strlcpy(buf + shift + (p - t), rbrace + 1, len - (shift + (p - t)));
-            status = brace_expand(buf, ary);
+            brace_expand(buf, ary);
         }
         free(buf); // FIXME: Use GLOB_FREE(buf) here?
     }
     else if (!lbrace && !rbrace) {
         rb_ary_push(ary, rb_str_new_cstr(str));
-        status = 1;
     }
-
-    return status;
 }
 
 static VALUE
