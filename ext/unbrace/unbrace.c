@@ -34,13 +34,12 @@ brace_expand(const char *str, VALUE ary) // FIXME: Add ",rb_encoding *enc)" here
     }
 
     if (lbrace && rbrace) {
+        long size = lbrace - s;
         size_t len = strlen(s) + 1;
         char *buf = (char *) malloc(len); // FIXME: Use ALLOC_N(...) here?
-        long shift;
         if (!buf) return;
 
-        memcpy(buf, s, lbrace - s);
-        shift = (lbrace - s);
+        memcpy(buf, s, size);
         p = lbrace;
         while (p < rbrace) {
             const char *t = ++p;
@@ -51,8 +50,8 @@ brace_expand(const char *str, VALUE ary) // FIXME: Add ",rb_encoding *enc)" here
                 if (*p == '\\' && (++p == rbrace)) break;
                 p++; // FIXME: For encoding, use Inc(p, pend, enc) here?
             }
-            memcpy(buf + shift, t, p - t);
-            strlcpy(buf + shift + (p - t), rbrace + 1, len - (shift + (p - t)));
+            memcpy(buf + size, t, p - t);
+            strlcpy(buf + size + (p - t), rbrace + 1, len - (size + (p - t)));
             brace_expand(buf, ary);
         }
         free(buf); // FIXME: Use GLOB_FREE(buf) here?
