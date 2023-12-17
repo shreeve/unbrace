@@ -18,6 +18,12 @@ lawyer_home_email_inactive
 lawyer_state
 ```
 
+## Test
+
+```
+ruby -runbrace test/test.rb
+```
+
 ## License
 
 This software is licensed under terms of the MIT License.
