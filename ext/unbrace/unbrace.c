@@ -60,9 +60,8 @@ static VALUE
 rb_str_unbrace(VALUE str)
 {
     if (!rb_block_given_p()) {
-        const char *str = "lawyer_{name,{work,home}_email_{active,inactive},state}";
         VALUE ary = rb_ary_new();
-        brace_expand(str, ary);
+        brace_expand(RSTRING_PTR(str), ary);
         return ary;
     }
     else {
